@@ -2,30 +2,14 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
-import VueRouter from 'vue-router';
-import Vuetify from 'vuetify';
-
-window.Vue.use(VueRouter);
-window.Vue.use(Vuetify);
-
-import ExampleComponent from './components/ExampleComponent.vue';
-import TesComponent from './components/TesComponent.vue';
-
-const routes = [
-    {
-        path: '/',
-        component: ExampleComponent
-    },
-    {
-        path: '/tes',
-        component: TesComponent
-    }
-]
-
-const router = new VueRouter({ routes })
+import router from './router'
+import store from './store'
+import vuetify from './plugins/vuetify';
+import './plugins/axios'
 
 const app = new Vue({
     el: '#app',
     router,
-    vuetify: new Vuetify(),
+    store,
+    vuetify
 });
