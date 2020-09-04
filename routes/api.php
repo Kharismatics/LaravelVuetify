@@ -17,3 +17,12 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+// Route::get('/category', 'CategoryController@index');
+// Route::post('/category/create', 'CategoryController@store');
+Route::resources([
+    // 'peoples' => 'PeopleController',
+    'category' => 'CategoryController',
+    // 'products' => 'ProductController',
+    // 'transactions' => 'TransactionController',
+]);

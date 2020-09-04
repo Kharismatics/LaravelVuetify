@@ -2269,10 +2269,97 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      valid: true,
+      form: {
+        name: "",
+        email: "",
+        select: null
+      },
+      nameRules: [function (v) {
+        return !!v || "Name is required";
+      }, function (v) {
+        return v && v.length <= 10 || "Name must be less than 10 characters";
+      }],
+      emailRules: [function (v) {
+        return !!v || "E-mail is required";
+      }, function (v) {
+        return /.+@.+\..+/.test(v) || "E-mail must be valid";
+      }],
+      items: [{
+        id: "1",
+        name: "tes"
+      } // '1',
+      // '2',
+      // '3',
+      // '4',
+      ],
+      checkbox: false
+    };
+  },
   methods: {
-    close: function close() {
+    validate: function validate() {
+      this.$refs.form.validate();
+    },
+    reset: function reset() {
+      this.$refs.form.reset();
+    },
+    resetValidation: function resetValidation() {
+      this.$refs.form.resetValidation();
+    },
+    Routeback: function Routeback() {
       this.$router.back();
+    },
+    Submit: function Submit() {
+      var _this = this;
+
+      var checked = this.$refs.form.validate();
+
+      if (checked) {
+        axios({
+          method: "post",
+          url: "/api/category",
+          data: {
+            name: this.form.name,
+            email: this.form.email,
+            created_by: this.form.select
+          } // headers: {'Content-Type': 'multipart/form-data' }
+
+        }).then(function (response) {
+          console.log(response.data);
+
+          if (response) {
+            _this.$router.back();
+          }
+        })["catch"](function (response) {
+          console.log(response);
+        });
+      }
     }
   }
 });
@@ -2361,115 +2448,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "ProductIndex",
   methods: {
@@ -2486,92 +2464,35 @@ __webpack_require__.r(__webpack_exports__);
         value: "name"
       }, {
         text: "Calories",
-        value: "calories"
-      }, {
-        text: "Fat (g)",
-        value: "fat"
-      }, {
-        text: "Carbs (g)",
-        value: "carbs"
-      }, {
-        text: "Protein (g)",
-        value: "protein"
-      }, {
-        text: "Iron (%)",
-        value: "iron"
+        value: "description"
       }],
-      desserts: [{
-        name: "Frozen Yogurt",
-        calories: 159,
-        fat: 6.0,
-        carbs: 24,
-        protein: 4.0,
-        iron: "1%"
-      }, {
-        name: "Ice cream sandwich",
-        calories: 237,
-        fat: 9.0,
-        carbs: 37,
-        protein: 4.3,
-        iron: "1%"
-      }, {
-        name: "Eclair",
-        calories: 262,
-        fat: 16.0,
-        carbs: 23,
-        protein: 6.0,
-        iron: "7%"
-      }, {
-        name: "Cupcake",
-        calories: 305,
-        fat: 3.7,
-        carbs: 67,
-        protein: 4.3,
-        iron: "8%"
-      }, {
-        name: "Gingerbread",
-        calories: 356,
-        fat: 16.0,
-        carbs: 49,
-        protein: 3.9,
-        iron: "16%"
-      }, {
-        name: "Jelly bean",
-        calories: 375,
-        fat: 0.0,
-        carbs: 94,
-        protein: 0.0,
-        iron: "0%"
-      }, {
-        name: "Lollipop",
-        calories: 392,
-        fat: 0.2,
-        carbs: 98,
-        protein: 0,
-        iron: "2%"
-      }, {
-        name: "Honeycomb",
-        calories: 408,
-        fat: 3.2,
-        carbs: 87,
-        protein: 6.5,
-        iron: "45%"
-      }, {
-        name: "Donut",
-        calories: 452,
-        fat: 25.0,
-        carbs: 51,
-        protein: 4.9,
-        iron: "22%"
-      }, {
-        name: "KitKat",
-        calories: 518,
-        fat: 26.0,
-        carbs: 65,
-        protein: 7,
-        iron: "6%"
-      }]
+      // desserts: [
+      //   {
+      //     name: "Frozen Yogurt",
+      //     description: 159,
+      //   },
+      //   {
+      //     name: "Ice cream sandwich",
+      //     description: 237,
+      //   },
+      // ],
+      desserts: [],
+      info: null,
+      loading: true,
+      errored: false
     };
+  },
+  mounted: function mounted() {
+    var _this = this;
+
+    axios.get("api/category").then(function (response) {
+      return _this.info = response.data, _this.desserts = response.data;
+    })["catch"](function (error) {
+      console.log(error);
+      _this.errored = true;
+    })["finally"](function () {
+      return _this.loading = false;
+    });
   }
 });
 
@@ -39687,58 +39608,126 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c(
-                "v-card-text",
+                "v-form",
+                {
+                  ref: "form",
+                  model: {
+                    value: _vm.valid,
+                    callback: function($$v) {
+                      _vm.valid = $$v
+                    },
+                    expression: "valid"
+                  }
+                },
                 [
                   _c(
-                    "v-col",
-                    { attrs: { cols: "12", sm: "6", md: "4" } },
+                    "v-card-text",
                     [
                       _c("v-text-field", {
-                        attrs: { label: "Legal first name*", required: "" }
+                        attrs: {
+                          counter: 10,
+                          rules: _vm.nameRules,
+                          label: "Name",
+                          required: ""
+                        },
+                        model: {
+                          value: _vm.form.name,
+                          callback: function($$v) {
+                            _vm.$set(_vm.form, "name", $$v)
+                          },
+                          expression: "form.name"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("v-text-field", {
+                        attrs: {
+                          rules: _vm.emailRules,
+                          label: "E-mail",
+                          required: ""
+                        },
+                        model: {
+                          value: _vm.form.email,
+                          callback: function($$v) {
+                            _vm.$set(_vm.form, "email", $$v)
+                          },
+                          expression: "form.email"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("v-select", {
+                        attrs: {
+                          items: _vm.items,
+                          rules: [
+                            function(v) {
+                              return !!v || "Item is required"
+                            }
+                          ],
+                          label: "Item",
+                          "item-value": "id",
+                          "item-text": "name",
+                          required: ""
+                        },
+                        model: {
+                          value: _vm.form.select,
+                          callback: function($$v) {
+                            _vm.$set(_vm.form, "select", $$v)
+                          },
+                          expression: "form.select"
+                        }
                       })
                     ],
                     1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-actions",
+                    [
+                      _c(
+                        "v-btn",
+                        {
+                          staticClass: "mr-4",
+                          attrs: { disabled: !_vm.valid, color: "success" },
+                          on: { click: _vm.validate }
+                        },
+                        [_vm._v("Validate")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          staticClass: "mr-4",
+                          attrs: { color: "error" },
+                          on: { click: _vm.reset }
+                        },
+                        [_vm._v("Reset Form")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "warning" },
+                          on: { click: _vm.resetValidation }
+                        },
+                        [_vm._v("Reset Validation")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "info" },
+                          on: { click: _vm.Routeback }
+                        },
+                        [_vm._v("Back")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        { attrs: { color: "info" }, on: { click: _vm.Submit } },
+                        [_vm._v("Submit")]
+                      )
+                    ],
+                    1
                   )
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-card-actions",
-                [
-                  _c("v-row", { attrs: { dense: "", justify: "end" } }, [
-                    _c(
-                      "div",
-                      { staticClass: "my-2" },
-                      [
-                        _c(
-                          "v-btn",
-                          {
-                            attrs: { color: "warning", dark: "" },
-                            on: { click: _vm.close }
-                          },
-                          [_vm._v("Back")]
-                        )
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      { staticClass: "my-2" },
-                      [
-                        _c(
-                          "v-btn",
-                          {
-                            attrs: { color: "success", dark: "" },
-                            on: { click: _vm.save }
-                          },
-                          [_vm._v("Save")]
-                        )
-                      ],
-                      1
-                    )
-                  ])
                 ],
                 1
               )
@@ -39830,7 +39819,7 @@ var render = function() {
                 "v-card-subtitle",
                 [
                   _vm._v(
-                    "Listen to your favorite artists and albums whenever and wherever, online and offline. \n          "
+                    "\n        Listen to your favorite artists and albums whenever and wherever, online and offline.\n        "
                   ),
                   _c(
                     "router-link",
@@ -39859,12 +39848,16 @@ var render = function() {
               _c(
                 "v-card-text",
                 [
+                  _vm.loading ? _c("div", [_vm._v("Loading...")]) : _vm._e(),
+                  _vm._v(" "),
                   _c("v-data-table", {
                     staticClass: "elevation-1",
                     attrs: {
                       headers: _vm.headers,
                       items: _vm.desserts,
-                      "items-per-page": 5
+                      "items-per-page": 5,
+                      loading: _vm.loading,
+                      "loading-text": "Loading..."
                     }
                   })
                 ],

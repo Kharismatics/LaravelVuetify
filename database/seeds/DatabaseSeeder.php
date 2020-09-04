@@ -12,5 +12,21 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // $this->call(UserSeeder::class);
+
+        DB::table('users')->insert([
+            'name' => 'admin',
+            'email' => 'kharismatics@gmail.com',
+            'password' => bcrypt('admin'),
+            'api_token' => base64_encode(Str::random(40)),
+            'created_at' => DB::raw('now()'),  
+        ]);
+        for ($i = 0; $i < 10000; $i++) {
+            DB::table('categories')->insert([
+                'name' => "test_$i",
+                'description' => "kharismatics_$i@gmail.com",
+                'created_by' => 1,  
+                'created_at' => DB::raw('now()'),  
+            ]);
+        }
     }
 }
