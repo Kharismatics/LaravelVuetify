@@ -102,7 +102,8 @@ export default {
         // model: true,
         children: [
           { icon: "mdi-contacts", text: "Users", url: "/user" },
-          { icon: "mdi-contacts", text: "Products", url: "/product" }
+          { icon: "mdi-contacts", text: "Products", url: "/product" },
+          { icon: "mdi-contacts", text: "Category", url: "/category" }
         ]
       }
     ]

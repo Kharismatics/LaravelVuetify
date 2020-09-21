@@ -16,6 +16,10 @@ import ProductIndex from '../views/product/index.vue'
 import ProductCreate from '../views/product/create.vue'
 import ProductEdit from '../views/product/edit.vue'
 
+import CategoryIndex from '../views/category/index.vue'
+import CategoryCreate from '../views/category/create.vue'
+import CategoryEdit from '../views/category/edit.vue'
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -47,6 +51,14 @@ const routes = [
                     // { path: 'edit', name: 'product.edit', component: () => import('../views/product/editplat.vue') }
                     { path: 'create', name: 'product.create', component: ProductCreate },
                     { path: 'edit', name: 'product.edit', component: ProductEdit }
+                ]
+            },
+            {
+                path: '/category', component: () => import('../views/layout.vue'),
+                children: [
+                    { path: '', name: 'category', component: CategoryIndex },
+                    { path: 'create', name: 'category.create', component: CategoryCreate },
+                    { path: 'edit', name: 'category.edit', component: CategoryEdit }
                 ]
             }
         ]
