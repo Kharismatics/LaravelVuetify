@@ -10,6 +10,7 @@
     "watch-poll": "npm run watch -- --watch-poll"
   },
   "dependencies": {
+    "sweetalert": "^2.1.2",
     "vue-router": "^3.4.3",
     "vuetify": "^2.2.11"
   },

@@ -1,6 +1,11 @@
 <template>
   <v-col cols="12">
-    <v-data-table :loading="loading" :headers="headers" :items="desserts"   sort-by="calories" class="elevation-1">
+    <div v-if="alert">
+      <v-alert :value="alert" dismissible transition="scale-transition" :type="alertType">
+        {{ alertMessage }}
+      </v-alert>
+    </div>
+    <v-data-table :loading="loading" :headers="headers" :items="MyArrayData"   sort-by="calories" class="elevation-1">
       <template v-slot:top>
         <v-toolbar flat>
           <v-toolbar-title>Category</v-toolbar-title>
@@ -17,30 +22,20 @@
               </v-card-title>
 
               <v-card-text>
-                <v-container>
-                  <v-row>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.name" label="name"></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.description" label="description"></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.created_by" label="created_by"></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-select
-                        v-model="editedItem.created_by"
-                        :items="selectitems"
-                        :rules="[v => !!v || 'Item is required']"
-                        label="Item"
-                        item-value="id"
-                        item-text="name"
-                        required
-                      ></v-select>
-                    </v-col>
-                  </v-row>
-                </v-container>
+                <v-form ref="form" v-model="valid">
+                  <v-text-field v-model="editedItem.name" label="name" :rules="validaterules.name"></v-text-field>
+                  <v-text-field v-model="editedItem.description" label="description" :rules="validaterules.description"></v-text-field>
+                  <v-text-field v-model="editedItem.created_by" label="created_by"></v-text-field>
+                  <v-select
+                    v-model="editedItem.created_by"
+                    :items="selectitems"
+                    :rules="validaterules.select"
+                    label="Item"
+                    item-value="id"
+                    item-text="name"
+                    required
+                  ></v-select>
+                </v-form>
               </v-card-text>
 
               <v-card-actions>
@@ -54,14 +49,9 @@
         </v-toolbar>
       </template>
       <template v-slot:item.actions="{ item }">
-        <!-- <v-icon color="orange darken-1" fab class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
-        <v-icon color="red" fab @click="deleteItem(item)">mdi-delete</v-icon> -->
         <v-btn color="orange darken-1" small dark  @click="editItem(item)"><v-icon small>mdi-pencil</v-icon></v-btn>
         <v-btn color="red" small dark  @click="deleteItem(item)"><v-icon small>mdi-delete</v-icon></v-btn>
       </template>
-      <!-- <template v-slot:no-data>
-        <v-btn color="primary" @click="initialize">Reset</v-btn>
-      </template> -->
     </v-data-table>
   </v-col>
 </template>
@@ -70,6 +60,9 @@
 export default {
   data: () => ({
     dialog: false,
+    alert: false,
+    alertMessage: 'tes',
+    alertType: 'success',
     loading: true,
     headers: [
       {
@@ -83,7 +76,7 @@ export default {
       { text: "created_by (g)", value: "created_by" },
       { text: "Actions", align: "center", value: "actions", sortable: false },
     ],
-    desserts: [],
+    MyArrayData: [],
     editedIndex: -1,
     selectitems: [
       { id: "1", name: "tes" },
@@ -102,6 +95,17 @@ export default {
       description: 0,
       created_by: 0,
     },
+    valid: true,
+    validaterules:{
+      // name:[],
+      // description: [
+      //   (v) => !!v || "Description is required",
+      //   (v) => (v && v.length <= 10) || "must be less than 10 characters",
+      // ],
+      // select: [
+      //   (v) => !!v || "Select is required",
+      // ],
+    }
   }),
 
   computed: {
@@ -112,41 +116,24 @@ export default {
 
   watch: {
     dialog(val) {
+    console.log('watccccch');
       val || this.close();
+    console.log(val);
     },
   },
 
   created() {
     this.initialize()
-    // console.log("this.initialize()");
-    // console.log(this.initialize());
-    
-    // if (this.initialize()) {
-      
-    //   this.loading = false      
-    // }
   },
 
   methods: {
     initialize() {
-      // this.desserts = [
-      //   {
-      //     name: "Frozen Yogurt",
-      //     description: 159,
-      //     created_by: 6.0,
-      //   },
-      //   {
-      //     name: "Ice cream sandwich",
-      //     description: 237,
-      //     created_by: 9.0,
-      //   },
-      // ];
       this.loading = true;
       axios
       .get("api/category")
       .then(
         (response) => (
-          (this.info = response.data), (this.desserts = response.data)
+          (this.info = response.data), (this.MyArrayData = response.data)
         )
       )
       .catch((error) => {
@@ -156,11 +143,10 @@ export default {
       .finally(() => (this.loading = false));
     },
 
-    editItem(item) {
-      this.editedIndex = this.desserts.indexOf(item);
+    editItem(item) {      
+      this.editedIndex = this.MyArrayData.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
-
       // console.log('edit mode');
       // axios({
       //   method: "GET",
@@ -180,29 +166,60 @@ export default {
     },
 
     deleteItem(item) {
-      // const index = this.desserts.indexOf(item);
-      // confirm("Are you sure you want to delete this item?") &&
-      //   this.desserts.splice(index, 1);
-      console.log(item.id);
-      confirm("Are you sure you want to delete this item?") &&
-      axios({
-        method: "DELETE",
-        url: "api/category/"+item.id,
-        data: {},
-        // headers: {'Content-Type': 'multipart/form-data' }
+      // // const index = this.MyArrayData.indexOf(item);
+      // // confirm("Are you sure you want to delete this item?") &&
+      // //   this.MyArrayData.splice(index, 1);
+      // console.log(item.id);
+      swal({
+        title: "Are you sure?",
+        text: "Once deleted, you will not be able to recover this imaginary file!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
       })
-      .then((response) => {
-        console.log(response.data);
-        if (response) {
-          this.initialize()
+      .then((willDelete) => {
+        if (willDelete) {
+          axios({
+            method: "DELETE",
+            url: "api/category/"+item.id,
+            data: {},
+            // headers: {'Content-Type': 'multipart/form-data' }
+          })
+          .then((response) => {
+            console.log(response.data);
+            if (response) {
+              swal("Success", "Record deleted", "success", { button: false });
+              this.initialize()
+              setTimeout(() => swal.close() , 5000);
+            }
+          })
+          .catch((response) => {
+            console.log(response);
+          });          
+        } else {
+          // swal("Your imaginary file is safe!");
         }
-      })
-      .catch((response) => {
-        console.log(response);
       });
+      // confirm("Are you sure you want to delete this item?") &&
+      // axios({
+      //   method: "DELETE",
+      //   url: "api/category/"+item.id,
+      //   data: {},
+      //   // headers: {'Content-Type': 'multipart/form-data' }
+      // })
+      // .then((response) => {
+      //   console.log(response.data);
+      //   if (response) {
+      //     this.initialize()
+      //   }
+      // })
+      // .catch((response) => {
+      //   console.log(response);
+      // });
     },
 
     close() {
+      this.validaterules = [];
       this.dialog = false;
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem);
@@ -210,11 +227,15 @@ export default {
       });
     },
 
+    validate(){
+      // this.dialog = true;
+      this.$refs.form.validate()
+    },
+
     save() {
       if (this.editedIndex > -1) {
-        console.log('edit data');
-        // Object.assign(this.desserts[this.editedIndex], this.editedItem);
-        console.log(this.editedItem.id);
+        // console.log('edit data');
+        // Object.assign(this.MyArrayData[this.editedIndex], this.editedItem);
         axios({
           method: "PUT",
           url: "api/category/"+this.editedItem.id,
@@ -224,15 +245,20 @@ export default {
         .then((response) => {
           console.log(response.data);
           if (response) {
+            this.close();
+            swal("Success", "Record updated", "success", { button: false });
             this.initialize()
+            setTimeout(() => swal.close() , 5000);
           }
         })
-        .catch((response) => {
-          console.log(response);
+        .catch((error) => {
+          const errors = error.response.data.errors
+          this.validaterules = errors;
+          this.validate()
         });
       } else {
-        console.log('add data');
-        // this.desserts.push(this.editedItem);
+        // console.log('add data');
+        // // this.MyArrayData.push(this.editedItem);
         axios({
           method: "post",
           url: "/api/category",
@@ -242,14 +268,19 @@ export default {
         .then((response) => {
           console.log(response.data);
           if (response) {
+            this.close();
+            swal("Success", "Record added", "success", { button: false });
             this.initialize()
+            setTimeout(() => swal.close() , 5000);
           }
         })
-        .catch((response) => {
-          console.log(response);
+        .catch((error) => {
+          const errors = error.response.data.errors
+          this.validaterules = errors;
+          this.validate()
         });
       }
-      this.close();
+      // this.close();
     },
   },
 };

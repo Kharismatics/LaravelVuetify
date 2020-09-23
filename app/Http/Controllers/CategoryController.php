@@ -15,6 +15,7 @@ class CategoryController extends Controller
     protected   $page = 'category',
                 $validate = [
                     'name' => 'required',
+                    'description' => 'required',
                 ];
     
     public function __construct(Request $request)

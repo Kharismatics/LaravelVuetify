@@ -31,9 +31,11 @@ import router from './router'
 // import store from './store'
 import vuetify from './plugins/vuetify';
 // import './plugins/axios'
+import swal from 'sweetalert'
 
 const app = new Vue({
     el: '#app',
     router,
-    vuetify
+    vuetify,
+    swal
 });
