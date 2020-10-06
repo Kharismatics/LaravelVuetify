@@ -130,7 +130,8 @@ export default {
     initialize() {
       this.loading = true;
       axios
-      .get("api/category")
+      // .get("api/category")
+      .get("api/category", { 'headers': { 'Authorization': 'Bearer SVFqZEZtUW9qTDNzWnVvQld3aGlZd3dqaVpoY1JuOXBJRm5yR1ZEeg==' } })
       .then(
         (response) => (
           (this.info = response.data), (this.MyArrayData = response.data)
@@ -183,7 +184,7 @@ export default {
             method: "DELETE",
             url: "api/category/"+item.id,
             data: {},
-            // headers: {'Content-Type': 'multipart/form-data' }
+            headers: { 'Authorization': 'Bearer SVFqZEZtUW9qTDNzWnVvQld3aGlZd3dqaVpoY1JuOXBJRm5yR1ZEeg==' }
           })
           .then((response) => {
             console.log(response.data);
@@ -240,7 +241,7 @@ export default {
           method: "PUT",
           url: "api/category/"+this.editedItem.id,
           data: this.editedItem,
-          // headers: {'Content-Type': 'multipart/form-data' }
+          headers: { 'Authorization': 'Bearer SVFqZEZtUW9qTDNzWnVvQld3aGlZd3dqaVpoY1JuOXBJRm5yR1ZEeg==' }
         })
         .then((response) => {
           console.log(response.data);
@@ -263,9 +264,10 @@ export default {
           method: "post",
           url: "/api/category",
           data: this.editedItem,
-          // headers: {'Content-Type': 'multipart/form-data' }
+          headers: { 'Authorization': 'Bearer SVFqZEZtUW9qTDNzWnVvQld3aGlZd3dqaVpoY1JuOXBJRm5yR1ZEeg==' }
         })
         .then((response) => {
+          console.log('successss');
           console.log(response.data);
           if (response) {
             this.close();
@@ -275,6 +277,7 @@ export default {
           }
         })
         .catch((error) => {
+          console.log('erorrrrr');
           const errors = error.response.data.errors
           this.validaterules = errors;
           this.validate()

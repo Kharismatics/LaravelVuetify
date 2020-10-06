@@ -20,11 +20,18 @@ class CategoryController extends Controller
     
     public function __construct(Request $request)
     {
-        // if ($request->has('api_token')) {
-        //     $this->middleware('auth:api');
-        // } else {
-        //     $this->middleware('auth');
-        // }
+        // if ($request->has('api_token')) 
+        //     $this->middleware('auth:api')->only(['test','index']);
+        if($request->ajax()){
+            $this->middleware('auth:api');
+        } else {
+            $this->middleware('auth');
+        }
+    }
+    public function test(Request $request)
+    {
+        $rows = Category::all();
+        return $rows;
     }
     public function index(Request $request)
     {

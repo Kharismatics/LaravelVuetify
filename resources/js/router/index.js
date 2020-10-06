@@ -24,6 +24,10 @@ const routes = [
     { path: '/login', name: 'login', component: Login },
     {
         path: '/', name: 'MainApp', component: MainApp,
+        beforeEnter: (to, from, next) => {
+            if (to.name !== 'login' && !(localStorage.getItem('api_token'))) next({ name: 'login' })
+            else next()
+        },
         children: [
             { path: '', name: 'home', component: Home, },
             { path: '/about', name: 'about', component: About },

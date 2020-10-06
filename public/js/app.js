@@ -2391,7 +2391,12 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       this.loading = true;
-      axios.get("api/category").then(function (response) {
+      axios // .get("api/category")
+      .get("api/category", {
+        'headers': {
+          'Authorization': 'Bearer SVFqZEZtUW9qTDNzWnVvQld3aGlZd3dqaVpoY1JuOXBJRm5yR1ZEeg=='
+        }
+      }).then(function (response) {
         return _this.info = response.data, _this.MyArrayData = response.data;
       })["catch"](function (error) {
         console.log(error);
@@ -2438,8 +2443,10 @@ __webpack_require__.r(__webpack_exports__);
           axios({
             method: "DELETE",
             url: "api/category/" + item.id,
-            data: {} // headers: {'Content-Type': 'multipart/form-data' }
-
+            data: {},
+            headers: {
+              'Authorization': 'Bearer SVFqZEZtUW9qTDNzWnVvQld3aGlZd3dqaVpoY1JuOXBJRm5yR1ZEeg=='
+            }
           }).then(function (response) {
             console.log(response.data);
 
@@ -2499,8 +2506,10 @@ __webpack_require__.r(__webpack_exports__);
         axios({
           method: "PUT",
           url: "api/category/" + this.editedItem.id,
-          data: this.editedItem // headers: {'Content-Type': 'multipart/form-data' }
-
+          data: this.editedItem,
+          headers: {
+            'Authorization': 'Bearer SVFqZEZtUW9qTDNzWnVvQld3aGlZd3dqaVpoY1JuOXBJRm5yR1ZEeg=='
+          }
         }).then(function (response) {
           console.log(response.data);
 
@@ -2529,9 +2538,12 @@ __webpack_require__.r(__webpack_exports__);
         axios({
           method: "post",
           url: "/api/category",
-          data: this.editedItem // headers: {'Content-Type': 'multipart/form-data' }
-
+          data: this.editedItem,
+          headers: {
+            'Authorization': 'Bearer SVFqZEZtUW9qTDNzWnVvQld3aGlZd3dqaVpoY1JuOXBJRm5yR1ZEeg=='
+          }
         }).then(function (response) {
+          console.log('successss');
           console.log(response.data);
 
           if (response) {
@@ -2548,6 +2560,7 @@ __webpack_require__.r(__webpack_exports__);
             }, 5000);
           }
         })["catch"](function (error) {
+          console.log('erorrrrr');
           var errors = error.response.data.errors;
           _this4.validaterules = errors;
 
@@ -99903,6 +99916,11 @@ var routes = [{
   path: '/',
   name: 'MainApp',
   component: _views_MainApp_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
+  beforeEnter: function beforeEnter(to, from, next) {
+    if (to.name !== 'login' && !localStorage.getItem('api_token')) next({
+      name: 'login'
+    });else next();
+  },
   children: [{
     path: '',
     name: 'home',
