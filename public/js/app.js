@@ -2100,9 +2100,78 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     source: String
+  },
+  data: function data() {
+    return {
+      user: {},
+      valid: true,
+      validaterules: {}
+    };
+  },
+  methods: {
+    login: function login() {
+      var _this = this;
+
+      axios.get("http://127.0.0.1:8000/api/sanctum/csrf-cookie").then(function (response) {
+        //debug cookie
+        // console.log(response);
+        axios({
+          method: "post",
+          url: "/api/login",
+          data: _this.user
+        }).then(function (result) {
+          console.log("successss");
+          console.log(result.data);
+
+          if (response) {
+            localStorage.setItem("api_token", result.data.token.plainTextToken);
+            swal("Success", "Welcome!", "success", {
+              button: false
+            }); // this.close();
+
+            return _this.$router.push({
+              name: 'home'
+            });
+            setTimeout(function () {
+              return swal.close();
+            }, 5000); // this.initialize();
+          } // this.validate()
+          // this.$refs.form.resetValidation()
+
+        })["catch"](function (error) {
+          if (error.response.statusText == "Unauthorized") {
+            _this.$refs.form.resetValidation();
+
+            swal("Error", "Wrong Combination", "error", {
+              button: false
+            });
+            setTimeout(function () {
+              return swal.close();
+            }, 5000);
+          } else {
+            var errors = error.response.data.errors;
+            _this.validaterules = errors;
+
+            _this.validate();
+          }
+        });
+      });
+    },
+    validate: function validate() {
+      // this.dialog = true;
+      this.$refs.form.validate();
+    }
   }
 });
 
@@ -39494,23 +39563,45 @@ var render = function() {
                             [
                               _c(
                                 "v-form",
+                                {
+                                  ref: "form",
+                                  model: {
+                                    value: _vm.valid,
+                                    callback: function($$v) {
+                                      _vm.valid = $$v
+                                    },
+                                    expression: "valid"
+                                  }
+                                },
                                 [
                                   _c("v-text-field", {
                                     attrs: {
-                                      label: "Login",
-                                      name: "login",
+                                      label: "Email",
                                       "prepend-icon": "mdi-account",
-                                      type: "text"
+                                      rules: _vm.validaterules.email
+                                    },
+                                    model: {
+                                      value: _vm.user.email,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.user, "email", $$v)
+                                      },
+                                      expression: "user.email"
                                     }
                                   }),
                                   _vm._v(" "),
                                   _c("v-text-field", {
                                     attrs: {
-                                      id: "password",
                                       label: "Password",
-                                      name: "password",
                                       "prepend-icon": "mdi-lock",
-                                      type: "password"
+                                      type: "password",
+                                      rules: _vm.validaterules.password
+                                    },
+                                    model: {
+                                      value: _vm.user.password,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.user, "password", $$v)
+                                      },
+                                      expression: "user.password"
                                     }
                                   })
                                 ],
@@ -39526,14 +39617,20 @@ var render = function() {
                               _c("v-spacer"),
                               _vm._v(" "),
                               _c(
-                                "router-link",
-                                { staticClass: "btn", attrs: { to: "/" } },
+                                "v-btn",
+                                {
+                                  attrs: { depressed: "", color: "primary" },
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.login()
+                                    }
+                                  }
+                                },
                                 [
-                                  _c("v-btn", { attrs: { color: "primary" } }, [
-                                    _vm._v("Login")
-                                  ])
-                                ],
-                                1
+                                  _vm._v(
+                                    "\n                Login\n              "
+                                  )
+                                ]
                               )
                             ],
                             1

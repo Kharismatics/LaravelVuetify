@@ -18,21 +18,29 @@
                 </v-tooltip>
               </v-toolbar>
               <v-card-text>
-                <v-form>
-                  <v-text-field label="Login" name="login" prepend-icon="mdi-account" type="text"></v-text-field>
+                <v-form ref="form" v-model="valid">
+                  <v-text-field
+                    label="Email"
+                    prepend-icon="mdi-account"
+                    v-model="user.email"
+                    :rules="validaterules.email"
+                  ></v-text-field>
 
                   <v-text-field
-                    id="password"
                     label="Password"
-                    name="password"
                     prepend-icon="mdi-lock"
                     type="password"
+                    v-model="user.password"
+                    :rules="validaterules.password"
                   ></v-text-field>
                 </v-form>
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <router-link to="/" class="btn"><v-btn color="primary">Login</v-btn></router-link>
+                <!-- <router-link to="/" class="btn"><v-btn color="primary">Login</v-btn></router-link> -->
+                <v-btn depressed color="primary" @click="login()">
+                  Login
+                </v-btn>
               </v-card-actions>
             </v-card>
           </v-col>
@@ -45,7 +53,56 @@
 <script>
 export default {
   props: {
-    source: String
-  }
+    source: String,
+  },
+  data: () => ({
+    user: {},
+    valid: true,
+    validaterules: {},
+  }),
+  methods: {
+    login() {
+      axios
+        .get("http://127.0.0.1:8000/api/sanctum/csrf-cookie")
+        .then((response) => {
+          //debug cookie
+          // console.log(response);
+          axios({
+            method: "post",
+            url: "/api/login",
+            data: this.user,
+          })
+            .then((result) => {
+              console.log("successss");
+              console.log(result.data);
+              if (response) {
+                localStorage.setItem("api_token", result.data.token.plainTextToken)
+                swal("Success", "Welcome!", "success", { button: false });
+                // this.close();
+                return this.$router.push({ name: 'home' })
+                setTimeout(() => swal.close(), 5000);
+                // this.initialize();
+              }
+              // this.validate()
+              // this.$refs.form.resetValidation()
+            })
+            .catch((error) => {
+              if (error.response.statusText == "Unauthorized") {
+                this.$refs.form.resetValidation()   
+                swal("Error", "Wrong Combination", "error", { button: false });
+                setTimeout(() => swal.close(), 5000);             
+              } else {
+                const errors = error.response.data.errors;
+                this.validaterules = errors;
+                this.validate();
+              }
+            });
+        });
+    },
+    validate() {
+      // this.dialog = true;
+      this.$refs.form.validate();
+    },
+  },
 };
 </script>

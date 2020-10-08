@@ -17,6 +17,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::middleware('auth:sanctum')->get('/user_sanctum', function (Request $request) {
+    return $request->user();
+});
 
 
 // // Registration routes...
@@ -45,6 +48,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 // // auth =========================
 
 Route::post('/login', 'AuthController@login');
+Route::post('/log_out', 'AuthController@log_out');
 Route::post('/register', 'AuthController@register');
 // Route::post('/password/email', 'AuthController@forgot');
 Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');

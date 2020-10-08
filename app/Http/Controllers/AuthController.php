@@ -34,8 +34,15 @@ class AuthController extends Controller
                 // 'api_token' => hash('sha256', $token),
                 'api_token' => base64_encode($token),
             ])->save();
+            // token sanctum
+            $token = $request->user()->createToken('Auth');
             // return authenticate user
-            return Auth::user()->makeVisible([ 'api_token' ]);
+            // return Auth::user()->makeVisible([ 'api_token' ]);
+            return response()->json([
+                'success' => true,
+                'user' => Auth::user(),
+                'token' => $token,
+            ], 200);
         }
     }
     public function login(Request $request)
@@ -53,8 +60,18 @@ class AuthController extends Controller
                 // 'api_token' => hash('sha256', $token),
                 'api_token' => base64_encode($token),
             ])->save();
+
+            // token sanctum
+            $token = $request->user()->createToken('Auth');
             // return authenticate user
-            return Auth::user()->makeVisible([ 'api_token' ]);
+            // return Auth::user()->makeVisible([ 'api_token' ]);
+            return response()->json([
+                'success' => true,
+                'user' => Auth::user(),
+                'token' => $token,
+            ], 200);
+        } else {
+            return response()->json(['error' => 'Unauthorized'], 401);
         }
     }
     public function remember_token(Request $request)
@@ -66,7 +83,12 @@ class AuthController extends Controller
         // if (Auth::attempt(['email' => $email, 'password' => $password], $remember)) {
         if (Auth::once(['email' => $email, 'password' => $password], $remember)) {
         // The user is being remembered...
-            return Auth::user()->makeVisible([ 'api_token' ]);
+            // return Auth::user()->makeVisible([ 'api_token' ]);
+            return response()->json([
+                'success' => true,
+                'user' => Auth::user(),
+                'token' => $token,
+            ], 200);
         }
     }
     // public function forgot(Request $request) {
