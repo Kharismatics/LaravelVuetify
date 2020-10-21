@@ -21,13 +21,16 @@ import CategoryIndex from '../views/category/index.vue'
 Vue.use(VueRouter)
 
 const routes = [
-    { path: '/login', name: 'login', component: Login },
+    { path: '/login', name: 'login', component: Login, meta: { auth: false } },
     {
         path: '/', name: 'MainApp', component: MainApp,
-        beforeEnter: (to, from, next) => {
-            if (to.name !== 'login' && !(localStorage.getItem('api_token'))) next({ name: 'login' })
-            else next()
+        meta: {
+            auth: true
         },
+        // beforeEnter: (to, from, next) => {
+        //     if (to.name !== 'login' && !(localStorage.getItem('api_token'))) next({ name: 'login' })
+        //     else next()
+        // },
         children: [
             { path: '', name: 'home', component: Home, },
             { path: '/about', name: 'about', component: About },

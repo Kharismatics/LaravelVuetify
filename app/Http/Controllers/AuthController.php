@@ -55,21 +55,19 @@ class AuthController extends Controller
         // if (Auth::attempt($credentials)) {
         if (Auth::once($credentials)) {
             // update token
-            $token = Str::random(40);
+            $token = base64_encode(Str::random(40));
             $request->user()->forceFill([
                 // 'api_token' => hash('sha256', $token),
-                'api_token' => base64_encode($token),
+                'api_token' => ($token),
             ])->save();
 
             // token sanctum
-            $token = $request->user()->createToken('Auth');
+            // $token = $request->user()->createToken('Auth');
             // return authenticate user
             // return Auth::user()->makeVisible([ 'api_token' ]);
-            return response()->json([
-                'success' => true,
-                'user' => Auth::user(),
-                'token' => $token,
-            ], 200);
+            return response()->json(['status' => 'success','data'=>Auth::user()], 200)->header('Authorization', $token);
+        
+            // return response()->json(['status' => 'success'], 200)->header('Authorization', $token);
         } else {
             return response()->json(['error' => 'Unauthorized'], 401);
         }

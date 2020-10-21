@@ -1,6 +1,10 @@
 <template>
   <v-app id="inspire">
-    <v-navigation-drawer v-model="drawer" :clipped="$vuetify.breakpoint.lgAndUp" app>
+    <v-navigation-drawer
+      v-model="drawer"
+      :clipped="$vuetify.breakpoint.lgAndUp"
+      app
+    >
       <v-list dense>
         <template v-for="item in items">
           <v-row v-if="item.heading" :key="item.heading" align="center">
@@ -23,7 +27,12 @@
                 <v-list-item-title>{{ item.text }}</v-list-item-title>
               </v-list-item-content>
             </template>
-            <v-list-item v-for="(child, i) in item.children" :key="i" link :to="child.url">
+            <v-list-item
+              v-for="(child, i) in item.children"
+              :key="i"
+              link
+              :to="child.url"
+            >
               <v-list-item-action v-if="child.icon">
                 <v-icon>{{ child.icon }}</v-icon>
               </v-list-item-action>
@@ -45,7 +54,12 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-app-bar :clipped-left="$vuetify.breakpoint.lgAndUp" app color="blue darken-3" dark>
+    <v-app-bar
+      :clipped-left="$vuetify.breakpoint.lgAndUp"
+      app
+      color="blue darken-3"
+      dark
+    >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title style="width: 300px" class="ml-0 pl-4">
         <span class="hidden-sm-and-down">My App</span>
@@ -64,17 +78,28 @@
         <v-icon>mdi-bell</v-icon>
       </v-btn>
       <router-link to="/setting" class="btn">
-      <v-btn icon>
-        <v-icon>mdi-cog</v-icon>
-      </v-btn>
-      </router-link>
-      <router-link to="/login" class="btn">
-        <v-btn icon large>
-          <v-avatar size="32px" item>
-            <v-img src="https://cdn.vuetifyjs.com/images/logos/logo.svg" alt="Vuetify"></v-img>
-          </v-avatar>
+        <v-btn icon>
+          <v-icon>mdi-cog</v-icon>
         </v-btn>
       </router-link>
+      <!-- <router-link to="/login" class="btn">
+        <v-btn icon large>
+          <v-avatar size="32px" item>
+            <v-img
+              src="https://cdn.vuetifyjs.com/images/logos/logo.svg"
+              alt="Vuetify"
+            ></v-img>
+          </v-avatar>
+        </v-btn>
+      </router-link> -->
+      <v-btn icon large @click="$auth.logout()">
+        <v-avatar size="32px" item>
+          <v-img
+            src="https://cdn.vuetifyjs.com/images/logos/logo.svg"
+            alt="Vuetify"
+          ></v-img>
+        </v-avatar>
+      </v-btn>
     </v-app-bar>
     <v-main>
       <v-container class="fill-height" fluid>
@@ -87,7 +112,7 @@
 <script>
 export default {
   props: {
-    source: String
+    source: String,
   },
   data: () => ({
     dialog: false,
@@ -103,10 +128,10 @@ export default {
         children: [
           { icon: "mdi-contacts", text: "Users", url: "/user" },
           { icon: "mdi-contacts", text: "Products", url: "/product" },
-          { icon: "mdi-contacts", text: "Category", url: "/category" }
-        ]
-      }
-    ]
-  })
+          { icon: "mdi-contacts", text: "Category", url: "/category" },
+        ],
+      },
+    ],
+  }),
 };
 </script>

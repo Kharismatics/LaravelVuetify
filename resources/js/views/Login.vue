@@ -39,7 +39,7 @@
                 <v-spacer></v-spacer>
                 <!-- <router-link to="/" class="btn"><v-btn color="primary">Login</v-btn></router-link> -->
                 <v-btn depressed color="primary" @click="login()">
-                  Login
+                  Loginnn
                 </v-btn>
               </v-card-actions>
             </v-card>
@@ -52,6 +52,9 @@
 
 <script>
 export default {
+  mounted() {
+    console.log('ni '+this.$auth.check());
+  },
   props: {
     source: String,
   },
@@ -62,42 +65,27 @@ export default {
   }),
   methods: {
     login() {
-      axios
-        .get("http://127.0.0.1:8000/api/sanctum/csrf-cookie")
-        .then((response) => {
-          //debug cookie
+      // get the redirect object
+      var redirect = this.$auth.redirect();
+      var app = this;
+      this.$auth.login({
+        params: this.user,
+        success: function (response) {
           // console.log(response);
-          axios({
-            method: "post",
-            url: "/api/login",
-            data: this.user,
-          })
-            .then((result) => {
-              console.log("successss");
-              console.log(result.data);
-              if (response) {
-                localStorage.setItem("api_token", result.data.token.plainTextToken)
-                swal("Success", "Welcome!", "success", { button: false });
-                // this.close();
-                return this.$router.push({ name: 'home' })
-                setTimeout(() => swal.close(), 5000);
-                // this.initialize();
-              }
-              // this.validate()
-              // this.$refs.form.resetValidation()
-            })
-            .catch((error) => {
-              if (error.response.statusText == "Unauthorized") {
-                this.$refs.form.resetValidation()   
-                swal("Error", "Wrong Combination", "error", { button: false });
-                setTimeout(() => swal.close(), 5000);             
-              } else {
-                const errors = error.response.data.errors;
-                this.validaterules = errors;
-                this.validate();
-              }
-            });
-        });
+          // this.$auth.user(response.data)
+          // // // handle redirection
+          // // const redirectTo = "home";
+          // // this.$router.push({ name: redirectTo });
+          // // // console.log(
+          // // //   JSON.stringify({ data: this.$auth.user() })
+          // // // );
+        },
+        error: function () {
+          app.has_error = true;
+        },
+        rememberMe: true,
+        fetchUser: true,
+      });
     },
     validate() {
       // this.dialog = true;
