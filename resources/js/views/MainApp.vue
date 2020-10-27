@@ -5,6 +5,14 @@
       :clipped="$vuetify.breakpoint.lgAndUp"
       app
     >
+      <v-sheet class="pa-4 text-center">
+        <v-avatar class="mb-4" color="grey darken-1" size="100"></v-avatar>
+
+        <div>{{ this.$store.getters["auth/user"].name }}</div>
+      </v-sheet>
+
+      <!-- <v-divider></v-divider> -->
+
       <v-list dense>
         <template v-for="item in items">
           <v-row v-if="item.heading" :key="item.heading" align="center">
@@ -54,52 +62,69 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-app-bar
+    <!-- <v-app-bar
       :clipped-left="$vuetify.breakpoint.lgAndUp"
       app
       color="blue darken-3"
+      dark
+    > -->
+    <v-app-bar
+      :clipped-left="$vuetify.breakpoint.lgAndUp"
+      app
+      color="primary"
       dark
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title style="width: 300px" class="ml-0 pl-4">
         <span class="hidden-sm-and-down">My App</span>
       </v-toolbar-title>
-      <v-text-field
+      <!-- <v-text-field
         flat
         solo-inverted
         hide-details
         prepend-inner-icon="mdi-magnify"
         label="Search"
         class="hidden-sm-and-down"
-      ></v-text-field>
-      <v-spacer></v-spacer>
-
-      <v-btn icon>
-        <v-icon>mdi-bell</v-icon>
-      </v-btn>
-      <router-link to="/setting" class="btn">
-        <v-btn icon>
-          <v-icon>mdi-cog</v-icon>
-        </v-btn>
-      </router-link>
-      <!-- <router-link to="/login" class="btn">
-        <v-btn icon large>
-          <v-avatar size="32px" item>
-            <v-img
-              src="https://cdn.vuetifyjs.com/images/logos/logo.svg"
-              alt="Vuetify"
-            ></v-img>
-          </v-avatar>
-        </v-btn>
-      </router-link> -->
-      <v-btn icon large @click="$auth.logout()">
+      ></v-text-field> -->
+      <!-- <v-btn
+        solo-inverted icon large @click="$auth.logout()">
         <v-avatar size="32px" item>
           <v-img
             src="https://cdn.vuetifyjs.com/images/logos/logo.svg"
             alt="Vuetify"
           ></v-img>
         </v-avatar>
+      </v-btn> -->
+      <v-spacer></v-spacer>
+
+      <v-btn icon>
+        <v-icon>mdi-bell</v-icon>
       </v-btn>
+      <v-menu bottom left transition="slide-y-transition" offset-y>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn dark icon v-bind="attrs" v-on="on">
+            <v-icon>mdi-dots-vertical</v-icon>
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item to="setting">
+            Setting
+            <div class="btn">
+              <v-btn icon>
+                <v-icon>mdi-cog</v-icon>
+              </v-btn>
+            </div>
+          </v-list-item>
+          <v-list-item to="#" @click="$auth.logout()">
+            Logout
+            <div class="btn">
+              <v-btn icon>
+                <v-icon>mdi-logout</v-icon>
+              </v-btn>
+            </div>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </v-app-bar>
     <v-main>
       <v-container class="fill-height" fluid>
@@ -113,6 +138,14 @@
 export default {
   props: {
     source: String,
+  },
+  mounted() {
+    this.$auth.fetch().then((response) => {
+      // console.log(response.data);
+      this.$auth.user(response.data);
+      // console.log(this.$auth.user());
+      // do something
+    });
   },
   data: () => ({
     dialog: false,

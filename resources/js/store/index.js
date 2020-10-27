@@ -1,25 +1,18 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import Vue from 'vue';
+import Vuex from 'vuex';
 
-Vue.use(Vuex)
+import auth from './auth.js';
+import basic from './basic.js';
+
+Vue.use(Vuex);
+
+const debug = process.env.NODE_ENV !== 'production';
 
 export default new Vuex.Store({
-    state: {
-        count: 0
+    modules: {
+        auth,
+        basic
     },
-    getters: {
-        getCounter: state => {
-            return state.count
-        }
-    },
-    mutations: {
-        increment(state) {
-            state.count++
-        },
-        decrement(state) {
-            if (state.count > 0) {
-                state.count--
-            }
-        }
-    }
-})
+
+    strict: debug
+});

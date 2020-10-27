@@ -26,14 +26,14 @@
 <script>
 export default {
   mounted() {
-    this.$auth
-    .fetch()
-    .then((response) => {
-      // console.log(response.data);
-      this.$auth.user(response.data)
-      console.log(this.$auth.user());
-        // do something
-    });
+    // this.$auth
+    // .fetch()
+    // .then((response) => {
+    //   // console.log(response.data);
+    //   this.$auth.user(response.data)
+    //   console.log(this.$auth.user());
+    //     // do something
+    // });
   },
   methods: {
     decrement() {

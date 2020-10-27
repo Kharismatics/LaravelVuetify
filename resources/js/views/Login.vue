@@ -8,14 +8,27 @@
               <v-toolbar color="primary" dark flat>
                 <v-toolbar-title>Login form</v-toolbar-title>
                 <v-spacer></v-spacer>
-                <v-tooltip bottom>
+                <!-- <v-tooltip bottom>
                   <template v-slot:activator="{ on }">
                     <v-btn :href="source" icon large target="_blank" v-on="on">
-                      <v-icon>mdi-code-tags</v-icon>
+                      <v-avatar size="100px" item>
+                        <v-img
+                          src="https://cdn.vuetifyjs.com/images/logos/logo.svg"
+                          alt="Vuetify"
+                        ></v-img>
+                      </v-avatar>
                     </v-btn>
                   </template>
                   <span>Source</span>
-                </v-tooltip>
+                </v-tooltip> -->
+                <v-btn icon large>
+                  <v-avatar size="100px" item>
+                    <v-img
+                      src="https://cdn.vuetifyjs.com/images/logos/logo.svg"
+                      alt="Vuetify"
+                    ></v-img>
+                  </v-avatar>
+                </v-btn>
               </v-toolbar>
               <v-card-text>
                 <v-form ref="form" v-model="valid">
@@ -38,8 +51,8 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <!-- <router-link to="/" class="btn"><v-btn color="primary">Login</v-btn></router-link> -->
-                <v-btn depressed color="primary" @click="login()">
-                  Loginnn
+                <v-btn type="submit" depressed color="primary" @click="login()">
+                  Login
                 </v-btn>
               </v-card-actions>
             </v-card>
@@ -53,7 +66,7 @@
 <script>
 export default {
   mounted() {
-    console.log('ni '+this.$auth.check());
+    console.log("ni " + this.$auth.check());
   },
   props: {
     source: String,
@@ -68,24 +81,45 @@ export default {
       // get the redirect object
       var redirect = this.$auth.redirect();
       var app = this;
+      // this.$auth.login({
+      //   params: this.user,
+      //   success: function (response) {
+      //     console.log(response);
+      //     // this.$auth.user(response.data)
+      //     // // // handle redirection
+      //     // // const redirectTo = "home";
+      //     // // this.$router.push({ name: redirectTo });
+      //     // // // console.log(
+      //     // // //   JSON.stringify({ data: this.$auth.user() })
+      //     // // // );
+      //   },
+      //   error: function (response) {
+      //     app.has_error = true;
+      //     console.log('tesssssss1');
+      //     console.log(response.response.data);
+      //   },
+      //   catch: function (response) {
+      //     // app.has_error = true;
+      //     console.log(response.response.data);
+      //     console.log('tesssssss2');
+      //   },
+      //   callback:function (param) {
+      //     console.log(param);
+
+      //   },
+      //   rememberMe: true,
+      //   fetchUser: false,
+      // });
       this.$auth.login({
-        params: this.user,
-        success: function (response) {
-          // console.log(response);
-          // this.$auth.user(response.data)
-          // // // handle redirection
-          // // const redirectTo = "home";
-          // // this.$router.push({ name: redirectTo });
-          // // // console.log(
-          // // //   JSON.stringify({ data: this.$auth.user() })
-          // // // );
-        },
-        error: function () {
-          app.has_error = true;
-        },
-        rememberMe: true,
-        fetchUser: true,
-      });
+          data: this.user,
+          rememberMe: true,
+          fetchUser: false,
+        }).then((res) => {
+          this.success = true;
+          console.log(res);
+        }, (res) => {
+            console.log(res);
+        });
     },
     validate() {
       // this.dialog = true;

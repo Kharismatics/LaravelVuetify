@@ -16,6 +16,8 @@
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
+    <!-- Icon -->
+    <link rel="shortcut icon" href="https://cdn.vuetifyjs.com/images/logos/logo.svg" type="image/x-icon">
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
@@ -33,6 +35,6 @@
     </div>
 </body>
     <script>
-        console.log('test');
+        console.log('welcome');
     </script>
 </html>

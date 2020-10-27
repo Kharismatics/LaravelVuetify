@@ -63,7 +63,8 @@ const routes = [
                 children: [
                     { path: '', name: 'category', component: CategoryIndex }
                 ]
-            }
+            },
+            // { path: '*', name: 'error-404', component: () => import('../views/errors/404.vue') },
         ]
     },
 ]

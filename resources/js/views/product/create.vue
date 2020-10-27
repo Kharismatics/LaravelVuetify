@@ -84,15 +84,24 @@ export default {
     Submit() {
       const checked = this.$refs.form.validate();
       if (checked) {
-        axios({
-          method: "post",
-          url: "/api/category",
+        // axios({
+        //   method: "post",
+        //   url: "/api/category",
+        //   data: {
+        //     name: this.form.name,
+        //     email: this.form.email,
+        //     created_by: this.form.select,
+        //   },
+        //   // headers: {'Content-Type': 'multipart/form-data' }
+        // })
+        this.$http({
+          url: `category`,
+          method: "POST",
           data: {
             name: this.form.name,
             email: this.form.email,
             created_by: this.form.select,
           },
-          // headers: {'Content-Type': 'multipart/form-data' }
         })
           .then((response) => {
             console.log(response.data);

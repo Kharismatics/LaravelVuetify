@@ -79,8 +79,12 @@ export default {
     };
   },
   mounted() {
-    axios
-      .get("api/category")
+    // axios
+    //   .get("api/category")
+    this.$http({
+        url: `category`,
+        method: "GET",
+      })
       .then(
         (response) => (
           (this.info = response.data), (this.desserts = response.data)

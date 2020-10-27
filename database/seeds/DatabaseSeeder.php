@@ -15,12 +15,12 @@ class DatabaseSeeder extends Seeder
 
         DB::table('users')->insert([
             'name' => 'admin',
-            'email' => 'kharismatics@gmail.com',
+            'email' => 'admin@admin.com',
             'password' => bcrypt('admin'),
             'api_token' => base64_encode(Str::random(40)),
             'created_at' => DB::raw('now()'),  
         ]);
-        for ($i = 0; $i < 10000; $i++) {
+        for ($i = 0; $i < 100; $i++) {
             DB::table('categories')->insert([
                 'name' => "test_$i",
                 'description' => "kharismatics_$i@gmail.com",
