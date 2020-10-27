@@ -22,11 +22,12 @@ class CategoryController extends Controller
     {
         // if ($request->has('api_token')) 
         //     $this->middleware('auth:api')->only(['test','index']);
-        if($request->ajax()){
-            $this->middleware('auth:api');
-        } else {
-            $this->middleware('auth');
-        }
+        // if($request->ajax()){
+            // $this->middleware('auth:api');
+            $this->middleware('auth:sanctum');
+        // } else {
+        //     $this->middleware('auth');
+        // }
     }
     public function test(Request $request)
     {

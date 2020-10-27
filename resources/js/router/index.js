@@ -27,10 +27,6 @@ const routes = [
         meta: {
             auth: true
         },
-        // beforeEnter: (to, from, next) => {
-        //     if (to.name !== 'login' && !(localStorage.getItem('api_token'))) next({ name: 'login' })
-        //     else next()
-        // },
         children: [
             { path: '', name: 'home', component: Home, },
             { path: '/about', name: 'about', component: About },
@@ -38,7 +34,6 @@ const routes = [
             {
                 path: '/user', component: UserIndex,
                 children: [
-                    // { path: 'create', name: 'user.create', components: { default: UserIndex, dialog: UserCreate } },
                     { path: 'create', name: 'user.create', components: { dialog: UserCreate } },
                     { path: 'edit', name: 'user.edit', components: { dialog: UserEdit } },
                     { path: 'createplat', name: 'user.createplat', component: () => import('../views/user/createplat.vue') },
@@ -48,12 +43,7 @@ const routes = [
             {
                 path: '/product', component: () => import('../views/layout.vue'),
                 children: [
-                    // { path: '', name: 'product', component: () => import('../views/layout.vue') },
                     { path: '', name: 'product', component: ProductIndex },
-                    // { path: 'create', name: 'product.create', components: { dialog: ProductCreate } },
-                    // { path: 'edit', name: 'product.edit', components: { dialog: ProductEdit } },
-                    // { path: 'create', name: 'product.create', component: () => import('../views/product/createplat.vue') },
-                    // { path: 'edit', name: 'product.edit', component: () => import('../views/product/editplat.vue') }
                     { path: 'create', name: 'product.create', component: ProductCreate },
                     { path: 'edit', name: 'product.edit', component: ProductEdit }
                 ]

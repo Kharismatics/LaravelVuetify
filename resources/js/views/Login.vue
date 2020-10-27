@@ -8,19 +8,6 @@
               <v-toolbar color="primary" dark flat>
                 <v-toolbar-title>Login form</v-toolbar-title>
                 <v-spacer></v-spacer>
-                <!-- <v-tooltip bottom>
-                  <template v-slot:activator="{ on }">
-                    <v-btn :href="source" icon large target="_blank" v-on="on">
-                      <v-avatar size="100px" item>
-                        <v-img
-                          src="https://cdn.vuetifyjs.com/images/logos/logo.svg"
-                          alt="Vuetify"
-                        ></v-img>
-                      </v-avatar>
-                    </v-btn>
-                  </template>
-                  <span>Source</span>
-                </v-tooltip> -->
                 <v-btn icon large>
                   <v-avatar size="100px" item>
                     <v-img
@@ -50,7 +37,6 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <!-- <router-link to="/" class="btn"><v-btn color="primary">Login</v-btn></router-link> -->
                 <v-btn type="submit" depressed color="primary" @click="login()">
                   Login
                 </v-btn>
@@ -66,7 +52,6 @@
 <script>
 export default {
   mounted() {
-    // console.log("ni " + this.$auth.check());
   },
   props: {
     source: String,
@@ -88,8 +73,6 @@ export default {
         })
         .then(
           (res) => {
-            // this.success = true;
-            // console.log(res.response);
           },
           (res) => {
             const error = res.response.data.error;
@@ -101,7 +84,6 @@ export default {
             }
             if (error) {
               console.log("wkwk");
-              // swal("Failed", "These credentials do not match our records.", "error", { confirmButtonColor: '#00d1b2'});
               swal({
                 title: "Failed",
                 text: "These credentials do not match our records.",
@@ -130,7 +112,6 @@ export default {
       //   .finally((res) => (console.log(res)));
     },
     validate() {
-      // this.dialog = true;
       this.$refs.form.validate();
     },
   },

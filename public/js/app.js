@@ -3418,23 +3418,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  mounted: function mounted() {// console.log("ni " + this.$auth.check());
-  },
+  mounted: function mounted() {},
   props: {
     source: String
   },
@@ -3455,9 +3440,7 @@ __webpack_require__.r(__webpack_exports__);
         data: this.user,
         rememberMe: true,
         fetchUser: false
-      }).then(function (res) {// this.success = true;
-        // console.log(res.response);
-      }, function (res) {
+      }).then(function (res) {}, function (res) {
         var error = res.response.data.error;
         var errors = res.response.data.errors;
         console.log(error);
@@ -3469,8 +3452,7 @@ __webpack_require__.r(__webpack_exports__);
         }
 
         if (error) {
-          console.log("wkwk"); // swal("Failed", "These credentials do not match our records.", "error", { confirmButtonColor: '#00d1b2'});
-
+          console.log("wkwk");
           swal({
             title: "Failed",
             text: "These credentials do not match our records.",
@@ -3496,7 +3478,6 @@ __webpack_require__.r(__webpack_exports__);
       //   .finally((res) => (console.log(res)));
     },
     validate: function validate() {
-      // this.dialog = true;
       this.$refs.form.validate();
     }
   }
@@ -3745,60 +3726,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      countries: ["ID", "EN"] // errorMessages: [],
-      // name: null,
-      // address: null,
-      // city: null,
-      // state: null,
-      // zip: null,
-      // country: null,
-      // formHasErrors: false,
-
+      countries: ["ID", "EN"]
     };
   },
-  computed: {// form () {
-    //   return {
-    //     name: this.name,
-    //     address: this.address,
-    //     city: this.city,
-    //     state: this.state,
-    //     zip: this.zip,
-    //     country: this.country
-    //   };
-    // },
-  },
-  watch: {// name () {
-    //   this.errorMessages = []
-    // }
-  },
-  methods: {// addressCheck () {
-    //   this.errorMessages = this.address && !this.name
-    //     ? ['Hey! I\'m required']
-    //     : []
-    //   return true
-    // },
-    // resetForm () {
-    //   this.errorMessages = []
-    //   this.formHasErrors = false
-    //   Object.keys(this.form).forEach(f => {
-    //     this.$refs[f].reset()
-    //   })
-    // },
-    // submit () {
-    //   this.formHasErrors = false
-    //   Object.keys(this.form).forEach(f => {
-    //     if (!this.form[f]) this.formHasErrors = true
-    //     this.$refs[f].validate(true)
-    //   })
-    // },
-    // updateError() {
-    //   console.log('error');
-    // }
-  }
+  computed: {},
+  watch: {},
+  methods: {}
 });
 
 /***/ }),
@@ -3812,12 +3748,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -3954,11 +3884,7 @@ __webpack_require__.r(__webpack_exports__);
       selectitems: [{
         id: "1",
         name: "tes"
-      } // '1',
-      // '2',
-      // '3',
-      // '4',
-      ],
+      }],
       editedItem: {
         name: "",
         description: 0,
@@ -3970,15 +3896,7 @@ __webpack_require__.r(__webpack_exports__);
         created_by: 0
       },
       valid: true,
-      validaterules: {// name:[],
-        // description: [
-        //   (v) => !!v || "Description is required",
-        //   (v) => (v && v.length <= 10) || "must be less than 10 characters",
-        // ],
-        // select: [
-        //   (v) => !!v || "Select is required",
-        // ],
-      }
+      validaterules: {}
     };
   },
   computed: {
@@ -3988,9 +3906,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   watch: {
     dialog: function dialog(val) {
-      console.log("watccccch");
       val || this.close();
-      console.log(val);
     }
   },
   created: function created() {
@@ -4000,17 +3916,13 @@ __webpack_require__.r(__webpack_exports__);
     initialize: function initialize() {
       var _this = this;
 
-      this.loading = true; // axios
-      // // .get("api/category")
-      // .get("api/category", { 'headers': { 'Authorization': 'Bearer SVFqZEZtUW9qTDNzWnVvQld3aGlZd3dqaVpoY1JuOXBJRm5yR1ZEeg==' } })
-
+      this.loading = true;
       this.$http({
         url: "category",
         method: "GET"
       }).then(function (response) {
         return _this.info = response.data, _this.MyArrayData = response.data;
       })["catch"](function (error) {
-        console.log(error);
         _this.errored = true;
       })["finally"](function () {
         return _this.loading = false;
@@ -4019,30 +3931,11 @@ __webpack_require__.r(__webpack_exports__);
     editItem: function editItem(item) {
       this.editedIndex = this.MyArrayData.indexOf(item);
       this.editedItem = Object.assign({}, item);
-      this.dialog = true; // console.log('edit mode');
-      // axios({
-      //   method: "GET",
-      //   url: "api/category/"+item.id,
-      //   data: {},
-      //   // headers: {'Content-Type': 'multipart/form-data' }
-      // })
-      // .then((response) => {
-      //   console.log(response.data);
-      //   if (response) {
-      //     this.initialize()
-      //   }
-      // })
-      // .catch((response) => {
-      //   console.log(response);
-      // });
+      this.dialog = true;
     },
     deleteItem: function deleteItem(item) {
       var _this2 = this;
 
-      // // const index = this.MyArrayData.indexOf(item);
-      // // confirm("Are you sure you want to delete this item?") &&
-      // //   this.MyArrayData.splice(index, 1);
-      // console.log(item.id);
       swal({
         title: "Are you sure?",
         text: "Once deleted, you will not be able to recover this imaginary file!",
@@ -4051,22 +3944,11 @@ __webpack_require__.r(__webpack_exports__);
         dangerMode: true
       }).then(function (willDelete) {
         if (willDelete) {
-          // axios({
-          //   method: "DELETE",
-          //   url: "api/category/" + item.id,
-          //   data: {},
-          //   headers: {
-          //     Authorization:
-          //       "Bearer SVFqZEZtUW9qTDNzWnVvQld3aGlZd3dqaVpoY1JuOXBJRm5yR1ZEeg==",
-          //   },
-          // })
           _this2.$http({
             url: "category/" + item.id,
             method: "DELETE",
             data: {}
           }).then(function (response) {
-            console.log(response.data);
-
             if (response) {
               swal("Success", "Record deleted", "success", {
                 button: false
@@ -4078,27 +3960,10 @@ __webpack_require__.r(__webpack_exports__);
                 return swal.close();
               }, 5000);
             }
-          })["catch"](function (response) {
-            console.log(response);
-          });
+          })["catch"](function (response) {});
         } else {// swal("Your imaginary file is safe!");
         }
-      }); // confirm("Are you sure you want to delete this item?") &&
-      // axios({
-      //   method: "DELETE",
-      //   url: "api/category/"+item.id,
-      //   data: {},
-      //   // headers: {'Content-Type': 'multipart/form-data' }
-      // })
-      // .then((response) => {
-      //   console.log(response.data);
-      //   if (response) {
-      //     this.initialize()
-      //   }
-      // })
-      // .catch((response) => {
-      //   console.log(response);
-      // });
+      });
     },
     close: function close() {
       var _this3 = this;
@@ -4118,24 +3983,11 @@ __webpack_require__.r(__webpack_exports__);
       var _this4 = this;
 
       if (this.editedIndex > -1) {
-        // console.log('edit data');
-        // Object.assign(this.MyArrayData[this.editedIndex], this.editedItem);
-        // axios({
-        //   method: "PUT",
-        //   url: "api/category/" + this.editedItem.id,
-        //   data: this.editedItem,
-        //   headers: {
-        //     Authorization:
-        //       "Bearer SVFqZEZtUW9qTDNzWnVvQld3aGlZd3dqaVpoY1JuOXBJRm5yR1ZEeg==",
-        //   },
-        // })
         this.$http({
           url: "category/" + this.editedItem.id,
           method: "PUT",
           data: this.editedItem
         }).then(function (response) {
-          console.log(response.data);
-
           if (response) {
             _this4.close();
 
@@ -4156,25 +4008,11 @@ __webpack_require__.r(__webpack_exports__);
           _this4.validate();
         });
       } else {
-        // console.log('add data');
-        // // this.MyArrayData.push(this.editedItem);
-        // axios({
-        //   method: "post",
-        //   url: "/api/category",
-        //   data: this.editedItem,
-        //   headers: {
-        //     Authorization:
-        //       "Bearer SVFqZEZtUW9qTDNzWnVvQld3aGlZd3dqaVpoY1JuOXBJRm5yR1ZEeg==",
-        //   },
-        // })
         this.$http({
           url: "category",
           method: "POST",
           data: this.editedItem
         }).then(function (response) {
-          console.log("successss");
-          console.log(response.data);
-
           if (response) {
             _this4.close();
 
@@ -4189,14 +4027,12 @@ __webpack_require__.r(__webpack_exports__);
             }, 5000);
           }
         })["catch"](function (error) {
-          console.log("erorrrrr");
           var errors = error.response.data.errors;
           _this4.validaterules = errors;
 
           _this4.validate();
         });
-      } // this.close();
-
+      }
     }
   }
 });
@@ -103184,7 +103020,7 @@ var config = {
     redirect: '/login'
   },
   loginData: {
-    url: 'login',
+    url: 'login_sanctum',
     method: 'POST',
     redirect: '/',
     fetchUser: true
@@ -103196,7 +103032,7 @@ var config = {
     makeRequest: true
   },
   fetchData: {
-    url: 'user',
+    url: 'user_sanctum',
     method: 'GET',
     enabled: true
   },
@@ -103476,10 +103312,6 @@ var routes = [{
   meta: {
     auth: true
   },
-  // beforeEnter: (to, from, next) => {
-  //     if (to.name !== 'login' && !(localStorage.getItem('api_token'))) next({ name: 'login' })
-  //     else next()
-  // },
   children: [{
     path: '',
     name: 'home',
@@ -103495,8 +103327,7 @@ var routes = [{
   }, {
     path: '/user',
     component: _views_user_index_vue__WEBPACK_IMPORTED_MODULE_7__["default"],
-    children: [// { path: 'create', name: 'user.create', components: { default: UserIndex, dialog: UserCreate } },
-    {
+    children: [{
       path: 'create',
       name: 'user.create',
       components: {
@@ -103526,16 +103357,11 @@ var routes = [{
     component: function component() {
       return __webpack_require__.e(/*! import() */ 0).then(__webpack_require__.bind(null, /*! ../views/layout.vue */ "./resources/js/views/layout.vue"));
     },
-    children: [// { path: '', name: 'product', component: () => import('../views/layout.vue') },
-    {
+    children: [{
       path: '',
       name: 'product',
       component: _views_product_index_vue__WEBPACK_IMPORTED_MODULE_10__["default"]
-    }, // { path: 'create', name: 'product.create', components: { dialog: ProductCreate } },
-    // { path: 'edit', name: 'product.edit', components: { dialog: ProductEdit } },
-    // { path: 'create', name: 'product.create', component: () => import('../views/product/createplat.vue') },
-    // { path: 'edit', name: 'product.edit', component: () => import('../views/product/editplat.vue') }
-    {
+    }, {
       path: 'create',
       name: 'product.create',
       component: _views_product_create_vue__WEBPACK_IMPORTED_MODULE_11__["default"]

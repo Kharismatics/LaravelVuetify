@@ -52,22 +52,27 @@ class AuthController extends Controller
             'password' => 'required'
         ]);        
         $credentials = $request->only('email', 'password');
-        // if (Auth::attempt($credentials)) {
         if (Auth::once($credentials)) {
-            // update token
             $token = base64_encode(Str::random(40));
             $request->user()->forceFill([
-                // 'api_token' => hash('sha256', $token),
                 'api_token' => ($token),
             ])->save();
-
-            // token sanctum
-            // $token = $request->user()->createToken('Auth');
-            // return authenticate user
-            // return Auth::user()->makeVisible([ 'api_token' ]);
+            return response()->json(['status' => 'success','data'=>Auth::user()], 200)->header('Authorization', $token);
+        } else {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+    }
+    public function login_sanctum(Request $request)
+    {
+        $this->validate($request, [
+            'email' => 'required',
+            'password' => 'required'
+        ]);        
+        $credentials = $request->only('email', 'password');
+        if (Auth::once($credentials)) {
+            $token = $request->user()->createToken('Auth')->plainTextToken;
             return response()->json(['status' => 'success','data'=>Auth::user()], 200)->header('Authorization', $token);
         
-            // return response()->json(['status' => 'success'], 200)->header('Authorization', $token);
         } else {
             return response()->json(['error' => 'Unauthorized'], 401);
         }

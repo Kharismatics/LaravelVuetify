@@ -14,9 +14,9 @@ const config = {
     tokenStore: ['localStorage'],
     rolesVar: 'role',
     registerData: { url: 'register', method: 'POST', redirect: '/login' },
-    loginData: { url: 'login', method: 'POST', redirect: '/', fetchUser: true },
+    loginData: { url: 'login_sanctum', method: 'POST', redirect: '/', fetchUser: true },
     logoutData: { url: 'log_out', method: 'POST', redirect: '/login', makeRequest: true },
-    fetchData: { url: 'user', method: 'GET', enabled: true },
+    fetchData: { url: 'user_sanctum', method: 'GET', enabled: true },
     // fetchData: {
     //     enabled: false
     // },

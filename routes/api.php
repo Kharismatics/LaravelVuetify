@@ -48,6 +48,7 @@ Route::middleware('auth:sanctum')->get('/user_sanctum', function (Request $reque
 // // auth =========================
 
 Route::post('/login', 'AuthController@login');
+Route::post('/login_sanctum', 'AuthController@login_sanctum');
 Route::post('/log_out', 'AuthController@log_out');
 Route::post('/register', 'AuthController@register');
 // Route::post('/password/email', 'AuthController@forgot');
