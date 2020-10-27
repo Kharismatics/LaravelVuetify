@@ -33,7 +33,7 @@ import vuetify from './plugins/vuetify'
 import swal from 'sweetalert'
 
 import VueRouter from 'vue-router'
-import VueAxios from 'vue-axios'
+import http from './http'
 import VueAuth from '@websanova/vue-auth'
 import auth from './auth'
 
@@ -42,16 +42,13 @@ import auth from './auth'
 Vue.router = router
 Vue.use(VueRouter)
 // Set Vue authentication
-Vue.use(VueAxios, axios)
-axios.defaults.baseURL = `${process.env.MIX_APP_URL}/api`
-// axios.defaults.baseURL = `api`
 Vue.use(VueAuth, auth)
-
+Vue.auth.productionTip = false;
 const app = new Vue({
     el: '#app',
     router,
     store,
     vuetify,
     swal,
-    // auth
+    http
 });

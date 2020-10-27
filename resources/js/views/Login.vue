@@ -66,7 +66,7 @@
 <script>
 export default {
   mounted() {
-    console.log("ni " + this.$auth.check());
+    // console.log("ni " + this.$auth.check());
   },
   props: {
     source: String,
@@ -78,48 +78,56 @@ export default {
   }),
   methods: {
     login() {
-      // get the redirect object
-      var redirect = this.$auth.redirect();
-      var app = this;
-      // this.$auth.login({
-      //   params: this.user,
-      //   success: function (response) {
-      //     console.log(response);
-      //     // this.$auth.user(response.data)
-      //     // // // handle redirection
-      //     // // const redirectTo = "home";
-      //     // // this.$router.push({ name: redirectTo });
-      //     // // // console.log(
-      //     // // //   JSON.stringify({ data: this.$auth.user() })
-      //     // // // );
-      //   },
-      //   error: function (response) {
-      //     app.has_error = true;
-      //     console.log('tesssssss1');
-      //     console.log(response.response.data);
-      //   },
-      //   catch: function (response) {
-      //     // app.has_error = true;
-      //     console.log(response.response.data);
-      //     console.log('tesssssss2');
-      //   },
-      //   callback:function (param) {
-      //     console.log(param);
-
-      //   },
-      //   rememberMe: true,
-      //   fetchUser: false,
-      // });
-      this.$auth.login({
+      this.validaterules = [];
+      // =====
+      this.$auth
+        .login({
           data: this.user,
           rememberMe: true,
           fetchUser: false,
-        }).then((res) => {
-          this.success = true;
-          console.log(res);
-        }, (res) => {
-            console.log(res);
-        });
+        })
+        .then(
+          (res) => {
+            // this.success = true;
+            // console.log(res.response);
+          },
+          (res) => {
+            const error = res.response.data.error;
+            const errors = res.response.data.errors;
+            console.log(error);
+            if (errors) {
+              this.validaterules = errors;
+              this.validate();
+            }
+            if (error) {
+              console.log("wkwk");
+              // swal("Failed", "These credentials do not match our records.", "error", { confirmButtonColor: '#00d1b2'});
+              swal({
+                title: "Failed",
+                text: "These credentials do not match our records.",
+                icon: "error",
+                confirmButtonColor:'#00d1b2'
+              });
+            }
+          }
+        );
+      // ======
+      // this.$auth
+      //   .login({
+      //     data: this.user,
+      //     rememberMe: true,
+      //     fetchUser: false,
+      //   })
+      //   .then(
+      //     (response) => (
+      //       ( console.log(response) )
+      //     )
+      //   )
+      //   .catch((error) => {
+      //     console.log(error.response);
+
+      //   })
+      //   .finally((res) => (console.log(res)));
     },
     validate() {
       // this.dialog = true;
