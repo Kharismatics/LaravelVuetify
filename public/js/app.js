@@ -4256,15 +4256,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: "ProductIndex",
-  methods: {
-    close: function close() {
-      this.$router.back();
-    }
-  },
   data: function data() {
     return {
+      totalDesserts: 0,
+      search: "",
+      desserts: [],
+      loading: true,
+      options: {},
       headers: [{
         text: "Dessert (100g serving)",
         align: "start",
@@ -4272,40 +4275,171 @@ __webpack_require__.r(__webpack_exports__);
         value: "name"
       }, {
         text: "Calories",
-        value: "description"
-      }],
-      // desserts: [
-      //   {
-      //     name: "Frozen Yogurt",
-      //     description: 159,
-      //   },
-      //   {
-      //     name: "Ice cream sandwich",
-      //     description: 237,
-      //   },
-      // ],
-      desserts: [],
-      info: null,
-      loading: true,
-      errored: false
+        value: "calories"
+      }, {
+        text: "Fat (g)",
+        value: "fat"
+      }, {
+        text: "Carbs (g)",
+        value: "carbs"
+      }, {
+        text: "Protein (g)",
+        value: "protein"
+      }, {
+        text: "Iron (%)",
+        value: "iron"
+      }, {
+        text: "Actions",
+        align: "center",
+        value: "actions",
+        sortable: false
+      }]
     };
   },
+  watch: {
+    options: {
+      handler: function handler() {
+        this.getDataFromApi();
+        console.log(this.options);
+        console.log(this.desserts);
+      },
+      deep: true
+    }
+  },
   mounted: function mounted() {
-    var _this = this;
+    this.getDataFromApi();
+  },
+  methods: {
+    getDataFromApi: function getDataFromApi() {
+      var _this = this;
 
-    // axios
-    //   .get("api/category")
-    this.$http({
-      url: "category",
-      method: "GET"
-    }).then(function (response) {
-      return _this.info = response.data, _this.desserts = response.data;
-    })["catch"](function (error) {
-      console.log(error);
-      _this.errored = true;
-    })["finally"](function () {
-      return _this.loading = false;
-    });
+      this.loading = true;
+      this.fakeApiCall().then(function (data) {
+        _this.desserts = data.items;
+        _this.totalDesserts = data.total;
+        _this.loading = false;
+      });
+    },
+
+    /**
+     * In a real application this would be a call to fetch() or axios.get()
+     */
+    fakeApiCall: function fakeApiCall() {
+      var _this2 = this;
+
+      return new Promise(function (resolve, reject) {
+        var _this2$options = _this2.options,
+            sortBy = _this2$options.sortBy,
+            sortDesc = _this2$options.sortDesc,
+            page = _this2$options.page,
+            itemsPerPage = _this2$options.itemsPerPage;
+
+        var items = _this2.getDesserts();
+
+        var total = items.length;
+
+        if (sortBy.length === 1 && sortDesc.length === 1) {
+          items = items.sort(function (a, b) {
+            var sortA = a[sortBy[0]];
+            var sortB = b[sortBy[0]];
+
+            if (sortDesc[0]) {
+              if (sortA < sortB) return 1;
+              if (sortA > sortB) return -1;
+              return 0;
+            } else {
+              if (sortA < sortB) return -1;
+              if (sortA > sortB) return 1;
+              return 0;
+            }
+          });
+        }
+
+        if (itemsPerPage > 0) {
+          items = items.slice((page - 1) * itemsPerPage, page * itemsPerPage);
+        }
+
+        setTimeout(function () {
+          resolve({
+            items: items,
+            total: total
+          });
+        }, 1000);
+      });
+    },
+    getDesserts: function getDesserts() {
+      return [{
+        name: "Frozen Yogurt",
+        calories: 159,
+        fat: 6.0,
+        carbs: 24,
+        protein: 4.0,
+        iron: "1%"
+      }, {
+        name: "Ice cream sandwich",
+        calories: 237,
+        fat: 9.0,
+        carbs: 37,
+        protein: 4.3,
+        iron: "1%"
+      }, {
+        name: "Eclair",
+        calories: 262,
+        fat: 16.0,
+        carbs: 23,
+        protein: 6.0,
+        iron: "7%"
+      }, {
+        name: "Cupcake",
+        calories: 305,
+        fat: 3.7,
+        carbs: 67,
+        protein: 4.3,
+        iron: "8%"
+      }, {
+        name: "Gingerbread",
+        calories: 356,
+        fat: 16.0,
+        carbs: 49,
+        protein: 3.9,
+        iron: "16%"
+      }, {
+        name: "Jelly bean",
+        calories: 375,
+        fat: 0.0,
+        carbs: 94,
+        protein: 0.0,
+        iron: "0%"
+      }, {
+        name: "Lollipop",
+        calories: 392,
+        fat: 0.2,
+        carbs: 98,
+        protein: 0,
+        iron: "2%"
+      }, {
+        name: "Honeycomb",
+        calories: 408,
+        fat: 3.2,
+        carbs: 87,
+        protein: 6.5,
+        iron: "45%"
+      }, {
+        name: "Donut",
+        calories: 452,
+        fat: 25.0,
+        carbs: 51,
+        protein: 4.9,
+        iron: "22%"
+      }, {
+        name: "KitKat",
+        calories: 518,
+        fat: 26.0,
+        carbs: 65,
+        protein: 7,
+        iron: "6%"
+      }];
+    }
   }
 });
 
@@ -42090,75 +42224,119 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "v-row",
-    { attrs: { dense: "" } },
+    "v-col",
+    { attrs: { cols: "12" } },
     [
-      _c(
-        "v-col",
-        { attrs: { cols: "12" } },
-        [
-          _c(
-            "v-card",
-            { staticStyle: { height: "520px" } },
-            [
-              _c("v-card-title", { staticClass: "headline" }, [
-                _vm._v("Product")
-              ]),
-              _vm._v(" "),
-              _c(
-                "v-card-subtitle",
-                [
-                  _vm._v(
-                    "\n        Listen to your favorite artists and albums whenever and wherever, online and offline.\n        "
-                  ),
-                  _c(
-                    "router-link",
-                    { attrs: { to: { name: "product.create" } } },
-                    [
-                      _c(
-                        "v-btn",
-                        {
-                          staticClass: "mx-2",
-                          attrs: { fab: "", dark: "", color: "indigo" }
+      _c("v-data-table", {
+        staticClass: "elevation-1",
+        attrs: {
+          headers: _vm.headers,
+          items: _vm.desserts,
+          options: _vm.options,
+          "server-items-length": _vm.totalDesserts,
+          loading: _vm.loading,
+          search: _vm.search
+        },
+        on: {
+          "update:options": function($event) {
+            _vm.options = $event
+          }
+        },
+        scopedSlots: _vm._u([
+          {
+            key: "top",
+            fn: function() {
+              return [
+                _c(
+                  "v-toolbar",
+                  { attrs: { flat: "" } },
+                  [
+                    _c("v-toolbar-title", [_vm._v("Product")]),
+                    _vm._v(" "),
+                    _c("v-spacer"),
+                    _vm._v(" "),
+                    _c("v-text-field", {
+                      attrs: {
+                        "append-icon": "mdi-magnify",
+                        label: "Search",
+                        "single-line": "",
+                        "hide-details": ""
+                      },
+                      model: {
+                        value: _vm.search,
+                        callback: function($$v) {
+                          _vm.search = $$v
                         },
-                        [
-                          _c("v-icon", { attrs: { dark: "" } }, [
-                            _vm._v("mdi-plus")
-                          ])
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  )
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-card-text",
-                [
-                  _vm.loading ? _c("div", [_vm._v("Loading...")]) : _vm._e(),
-                  _vm._v(" "),
-                  _c("v-data-table", {
-                    staticClass: "elevation-1",
-                    attrs: {
-                      headers: _vm.headers,
-                      items: _vm.desserts,
-                      "items-per-page": 5,
-                      loading: _vm.loading,
-                      "loading-text": "Loading..."
+                        expression: "search"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("v-divider", {
+                      staticClass: "mx-4",
+                      attrs: { inset: "", vertical: "" }
+                    }),
+                    _vm._v(" "),
+                    _c(
+                      "v-btn",
+                      {
+                        staticClass: "mb-2",
+                        attrs: { color: "primary", dark: "" }
+                      },
+                      [_c("v-icon", [_vm._v("mdi-plus")])],
+                      1
+                    )
+                  ],
+                  1
+                )
+              ]
+            },
+            proxy: true
+          },
+          {
+            key: "item.actions",
+            fn: function(ref) {
+              var item = ref.item
+              return [
+                _c(
+                  "v-btn",
+                  {
+                    attrs: { color: "warning", small: "", dark: "" },
+                    on: {
+                      click: function($event) {
+                        return _vm.editItem(item)
+                      }
                     }
-                  })
-                ],
-                1
-              )
-            ],
-            1
-          )
-        ],
-        1
-      )
+                  },
+                  [
+                    _c("v-icon", { attrs: { small: "" } }, [
+                      _vm._v("mdi-pencil")
+                    ])
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "v-btn",
+                  {
+                    attrs: { color: "error", small: "", dark: "" },
+                    on: {
+                      click: function($event) {
+                        return _vm.deleteItem(item)
+                      }
+                    }
+                  },
+                  [
+                    _c("v-icon", { attrs: { small: "" } }, [
+                      _vm._v("mdi-delete")
+                    ])
+                  ],
+                  1
+                )
+              ]
+            }
+          }
+        ])
+      })
     ],
     1
   )
@@ -103187,7 +103365,7 @@ __webpack_require__.r(__webpack_exports__);
 // axios
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_axios__WEBPACK_IMPORTED_MODULE_1___default.a, axios__WEBPACK_IMPORTED_MODULE_2___default.a);
-axios__WEBPACK_IMPORTED_MODULE_2___default.a.defaults.baseURL = "".concat("http://127.0.0.1:8000", "/api"); // // Vue Resource
+axios__WEBPACK_IMPORTED_MODULE_2___default.a.defaults.baseURL = "".concat("http://localhost:5000", "/api"); // // Vue Resource
 // Vue.use(VueResource);
 // Vue.http.options.root = process.env.MIX_APP_URL+'/api';
 
