@@ -22,6 +22,13 @@
           <v-toolbar-title>Category</v-toolbar-title>
           <!-- <v-divider class="mx-4" inset vertical></v-divider> -->
           <v-spacer></v-spacer>
+          
+          <v-text-field
+            v-model="search"
+            append-icon="mdi-magnify"
+            label="Search"
+          ></v-text-field>
+          <v-divider class="mx-4" inset vertical></v-divider>
 
           <v-dialog v-model="dialog" max-width="500px">
             <!-- one activator -->
@@ -104,6 +111,7 @@
 <script>
 export default {
   data: () => ({
+    search: "",
     dialog: false,
     alert: false,
     alertMessage: "tes",

@@ -59,6 +59,6 @@ Route::post('/test', 'CategoryController@test');
 Route::resources([
     // 'peoples' => 'PeopleController',
     'category' => 'CategoryController',
-    // 'products' => 'ProductController',
+    'product' => 'ProductController',
     // 'transactions' => 'TransactionController',
 ]);

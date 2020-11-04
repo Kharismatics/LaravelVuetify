@@ -1,21 +1,18 @@
+
+
 <template>
   <v-col cols="12">
-    <!-- <div v-if="alert">
-      <v-alert
-        :value="alert"
-        dismissible
-        transition="scale-transition"
-        :type="alertType"
-      >
-        {{ alertMessage }}
-      </v-alert>
-    </div> -->
+    <!-- <v-text-field
+      label="Search"
+      append-icon="mdi-magnify"
+      single-line
+      hide-details
+      v-model="search"
+    ></v-text-field>
+    <v-spacer></v-spacer> -->
     <v-data-table
       :headers="headers"
-      :items="desserts"
-      :options.sync="options"
-      :server-items-length="totalDesserts"
-      :loading="loading"
+      :items="items"
       :search="search"
       class="elevation-1"
     >
@@ -36,7 +33,13 @@
           </v-btn>
         </v-toolbar>
       </template>
-      <template v-slot:item.actions="{ item }">
+      <!-- <template slot="items" slot-scope="props"> -->
+        <!-- <td class="text-xs-left">{{ props.item.id }}</td>
+        <td class="text-xs-left">{{ props.item }}</td>
+        <td class="text-xs-left">{{ props.item.category.name }}</td>
+        <td class="text-xs-left">{{ props.item.website }}</td> -->
+      <!-- </template> -->
+      <template v-slot:item.action="{ item }">
         <v-btn color="warning" small dark @click="editItem(item)"
           ><v-icon small>mdi-pencil</v-icon></v-btn
         >
@@ -44,6 +47,18 @@
           ><v-icon small>mdi-delete</v-icon></v-btn
         >
       </template>
+      <!-- <v-alert slot="no-results" :value="true" color="error" icon="warning">
+        Your search for "{{ search }}" found no results.
+      </v-alert> -->
+      <td
+        align="center"
+        slot="no-results"
+        :value="true"
+        color="error"
+        icon="warning"
+      >
+        Your search for "{{ search }}" found no results.
+      </td>
     </v-data-table>
   </v-col>
 </template>
@@ -51,171 +66,42 @@
 export default {
   data() {
     return {
-      totalDesserts: 0,
       search: "",
-      desserts: [],
-      loading: true,
-      options: {},
+      loading:true,
       headers: [
-        {
-          text: "Dessert (100g serving)",
-          align: "start",
-          sortable: false,
-          value: "name",
-        },
-        { text: "Calories", value: "calories" },
-        { text: "Fat (g)", value: "fat" },
-        { text: "Carbs (g)", value: "carbs" },
-        { text: "Protein (g)", value: "protein" },
-        { text: "Iron (%)", value: "iron" },
-        { text: "Actions", align: "center", value: "actions", sortable: false },
+        { text: "ID", value: "id" },
+        { text: "Name", value: "name" },
+        { text: "Email", value: "category.name" },
+        { text: "Website", value: "description" },
+        { text: "Action", value: "action", sortable: false },
       ],
+      items: [],
     };
   },
-  watch: {
-    options: {
-      handler() {
-        this.getDataFromApi();
-        console.log(this.options);
-        console.log(this.desserts);
-      },
-      deep: true,
-    },
-  },
-  mounted() {
-    this.getDataFromApi();
+  created: function () {
+    this.getData();
   },
   methods: {
-    getDataFromApi() {
-      this.loading = true;
-      this.fakeApiCall().then((data) => {
-        this.desserts = data.items;
-        this.totalDesserts = data.total;
-        this.loading = false;
-      });
-    },
-    /**
-     * In a real application this would be a call to fetch() or axios.get()
-     */
-    fakeApiCall() {
-      return new Promise((resolve, reject) => {
-        const { sortBy, sortDesc, page, itemsPerPage } = this.options;
-
-        let items = this.getDesserts();
-        const total = items.length;
-
-        if (sortBy.length === 1 && sortDesc.length === 1) {
-          items = items.sort((a, b) => {
-            const sortA = a[sortBy[0]];
-            const sortB = b[sortBy[0]];
-
-            if (sortDesc[0]) {
-              if (sortA < sortB) return 1;
-              if (sortA > sortB) return -1;
-              return 0;
-            } else {
-              if (sortA < sortB) return -1;
-              if (sortA > sortB) return 1;
-              return 0;
-            }
-          });
-        }
-
-        if (itemsPerPage > 0) {
-          items = items.slice((page - 1) * itemsPerPage, page * itemsPerPage);
-        }
-
-        setTimeout(() => {
-          resolve({
-            items,
-            total,
-          });
-        }, 1000);
-      });
-    },
-    getDesserts() {
-      return [
-        {
-          name: "Frozen Yogurt",
-          calories: 159,
-          fat: 6.0,
-          carbs: 24,
-          protein: 4.0,
-          iron: "1%",
-        },
-        {
-          name: "Ice cream sandwich",
-          calories: 237,
-          fat: 9.0,
-          carbs: 37,
-          protein: 4.3,
-          iron: "1%",
-        },
-        {
-          name: "Eclair",
-          calories: 262,
-          fat: 16.0,
-          carbs: 23,
-          protein: 6.0,
-          iron: "7%",
-        },
-        {
-          name: "Cupcake",
-          calories: 305,
-          fat: 3.7,
-          carbs: 67,
-          protein: 4.3,
-          iron: "8%",
-        },
-        {
-          name: "Gingerbread",
-          calories: 356,
-          fat: 16.0,
-          carbs: 49,
-          protein: 3.9,
-          iron: "16%",
-        },
-        {
-          name: "Jelly bean",
-          calories: 375,
-          fat: 0.0,
-          carbs: 94,
-          protein: 0.0,
-          iron: "0%",
-        },
-        {
-          name: "Lollipop",
-          calories: 392,
-          fat: 0.2,
-          carbs: 98,
-          protein: 0,
-          iron: "2%",
-        },
-        {
-          name: "Honeycomb",
-          calories: 408,
-          fat: 3.2,
-          carbs: 87,
-          protein: 6.5,
-          iron: "45%",
-        },
-        {
-          name: "Donut",
-          calories: 452,
-          fat: 25.0,
-          carbs: 51,
-          protein: 4.9,
-          iron: "22%",
-        },
-        {
-          name: "KitKat",
-          calories: 518,
-          fat: 26.0,
-          carbs: 65,
-          protein: 7,
-          iron: "6%",
-        },
-      ];
+    getData() {
+      // axios
+      //   .get("https://jsonplaceholder.typicode.com/users")
+      //   .then((response) => {
+      //     //console.log(response.data);
+      //     this.items = response.data;
+      //   });
+      this.$http({
+        url: `product`,
+        method: "GET",
+      })
+        .then(
+          (response) => (
+            (this.items = response.data)
+          )
+        )
+        .catch((error) => {
+          console.log('error');
+        })
+        .finally(() => (this.loading = false));
     },
   },
 };
